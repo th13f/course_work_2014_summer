@@ -7,14 +7,7 @@
 
 
 import by.bsu.coursework.converter.Converter;
-import by.bsu.coursework.structures.Edge;
-import by.bsu.coursework.structures.GraphWorker;
 import by.bsu.coursework.structures.Structure;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
-import edu.uci.ics.jung.algorithms.shortestpath.MinimumSpanningForest;
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  *
@@ -116,6 +109,12 @@ public class Starter {
                 "/*z_1*/1"; //правая часть маленьких уравнений
         
         Structure system = Converter.convert(file);
+        system.calculate();
+        int root=0;
+        for (int i=0; i<system.getVertices(); i++){
+            System.out.print(system.getpArray(root)[i]+",");
+        }
+        System.out.println("\nroot="+system.getRoot(root));
         System.out.println("OK");
     }
 }

@@ -4,7 +4,10 @@
  */
 package by.bsu.coursework.structures;
 
+import java.util.Collections;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Stack;
 
 /**
  *
@@ -35,8 +38,40 @@ public class GraphWorker {
         return spanningTree;
     }
     
-    public static int[] getPArray(LinkedList<Edge> tree, int vertices){
-        int[] p = new int[vertices];
+    public static Integer[] getPArray(LinkedList<Edge> tree, LinkedList<Edge> newTree, int root, int verticesCount){
+        Integer[] p = new Integer[verticesCount];
+        LinkedList<Edge> tmpEdges = new LinkedList<>();
+        Stack<Integer> vertices = new Stack<>();
+        
+        for(Edge e:tree){
+            tmpEdges.add(e);
+        }
+        
+        for (int i=0; i<verticesCount; i++){
+            p[i] = -2;
+        }
+        p[root]=-1;
+        
+        int current = root;
+        while (!tmpEdges.isEmpty()){
+            for (Edge e:tmpEdges){
+                if (e.getTo() == current){
+                    p[e.getFrom()] = current;
+                    vertices.push(e.getFrom());
+                    newTree.add(e.clone());
+                    tmpEdges.remove(e);
+                    break;
+                }
+                else if (e.getFrom() == current){
+                    p[e.getTo()] = current;
+                    vertices.push(e.getTo());
+                    newTree.add(new Edge(e.getTo(),e.getFrom()));
+                    tmpEdges.remove(e);
+                    break;
+                }
+            }
+            current = vertices.pop();
+        }
         
         return p;
     }

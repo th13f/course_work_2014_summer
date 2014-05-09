@@ -39,4 +39,9 @@ public class Edge {
     public Edge clone(){
         return new Edge(from,to);
     }
+
+    @Override
+    public String toString() {
+        return "Edge{" + "from=" + from + ", to=" + to + '}';
+    }
 }

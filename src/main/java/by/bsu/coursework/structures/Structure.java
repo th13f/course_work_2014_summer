@@ -20,6 +20,8 @@ public class Structure {
     private ArrayList<LinkedList<Lambda>> bigEquations;
     private ArrayList<ArrayList<Integer>> alphas;
     private ArrayList<LinkedList<Edge>> spanningTrees;
+    private ArrayList<Integer[]> pArrays;
+    private ArrayList<Integer> roots;
     
     private int types;
     private int vertices;
@@ -33,6 +35,8 @@ public class Structure {
         alphas = new ArrayList<>(types);
         cyclicEdges = new ArrayList<>(types);
         spanningTrees = new ArrayList<>(types);
+        pArrays = new ArrayList<>(types);
+        roots = new ArrayList<>(types);
         for (int i=0; i<types; i++){
             flows.add(new LinkedList<Edge>());
             cyclicEdges.add(new LinkedList<Edge>());
@@ -42,10 +46,14 @@ public class Structure {
                 alphas.get(i).add(0);
             }
         }
-        
-        //calculation
+    }
+    
+    public void calculate() {
         for (LinkedList<Edge> flow:flows){
-            spanningTrees.add(GraphWorker.getSpanningTree(flow));
+            LinkedList<Edge> tree = GraphWorker.getSpanningTree(flow);
+            LinkedList<Edge> newTree = new LinkedList<>();
+            pArrays.add(GraphWorker.getPArray(tree, newTree, tree.get(0).getTo(), vertices));
+            roots.add(tree.get(0).getTo());
         }
     }
     
@@ -67,16 +75,24 @@ public class Structure {
     public LinkedList<Edge> getFlow(int i){
         return flows.get(i);
     }
-
+    
     public LinkedList<Edge> getCyclicEdges(int i) {
         return cyclicEdges.get(i);
     }
-
+    
     public int getTypes() {
         return types;
     }
-
+    
     public int getVertices() {
         return vertices;
+    }
+
+    public Integer[] getpArray(int i) {
+        return pArrays.get(i);
+    }
+    
+    public int getRoot(int i) {
+        return roots.get(i);
     }
 }

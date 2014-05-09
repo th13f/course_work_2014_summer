@@ -27,18 +27,21 @@ public class Starter {
      */
     public static void main(String[] args) {
         String file = 
-                "/*|I|*/5\n" +
-                "/*|K|*/3\n" +
-                "/*widetilde{U}^1*/\n" +
+                "/*|I|*/5\n" + //количество вершин
+                "/*|K|*/3\n" + //количество потоков
+                
+                "/*widetilde{U}^1*/\n" + //указан номер потока с перечислением его ребер
                 "/*{1,2}*/\n" +
                 "/*{1,3}*/\n" +
                 "/*{2,3}*/\n" +
+                
                 "/*widetilde{U}^2*/\n" +
                 "/*{2,3}*/\n" +
                 "/*{2,4}*/\n" +
                 "/*{3,4}*/\n" +
                 "/*{4,5}*/\n" +
                 "/*{5,3}*/\n" +
+                
                 "/*widetilde{U}^3*/\n" +
                 "/*{2,3}*/\n" +
                 "/*{2,4}*/\n" +
@@ -46,16 +49,22 @@ public class Starter {
                 "/*{4,5}*/\n" +
                 "/*{5,3}*/\n" +
                 "/*{2,5}*/\n" +
-                "/*widetilde{U}_0*/\n" +
+                
+                "/*widetilde{U}_0*/\n" + //указаны индексы, которые будут учавствовать в маленьких уравнениях. уравнения вида x2_32+x3_32=2, x1_12+x2_12+x3_12=1;
                 "/*{2,4}*/1\n" +
-                "/*widetilde{U}_0^1*/\n" +
+                
+                "/*widetilde{U}_0^1*/\n" + //коэффициент перед переменной с данным индексом.
                 "/*{2,4}*/0\n" +
+                
                 "/*widetilde{U}_0^2*/\n" +
                 "/*{2,4}*/1\n" +
+                
                 "/*widetilde{U}_0^3*/\n" +
                 "/*{2,4}*/1\n" +
-                "/*q*/2\n" +
-                "/*lambda_12^11*/2\n" +
+                
+                "/*q*/2\n" + //количество больших уравнений
+                
+                "/*lambda_12^11*/2\n" + //коэффициенты перед иксами с заданными индексами в больших уравнениях
                 "/*lambda_13^11*/3\n" +
                 "/*lambda_23^11*/1\n" +
                 "/*lambda_23^21*/4\n" +
@@ -68,6 +77,7 @@ public class Starter {
                 "/*lambda_45^31*/7\n" +
                 "/*lambda_53^21*/1\n" +
                 "/*lambda_53^31*/2\n" +
+                
                 "/*lambda_12^12*/1\n" +
                 "/*lambda_13^12*/2\n" +
                 "/*lambda_23^12*/2\n" +
@@ -81,32 +91,31 @@ public class Starter {
                 "/*lambda_45^32*/3\n" +
                 "/*lambda_53^22*/2\n" +
                 "/*lambda_53^32*/-1\n" +
-                "/*a_1^1*/4\n" +
+                
+                "/*a_1^1*/4\n" + //правая часть систем
                 "/*a_2^1*/6\n" +
                 "/*a_3^1*/-10\n" +
+                "/*a_4^1*/0\n" +
+                "/*a_5^1*/0\n" +
+                
                 "/*a_1^2*/5\n" +
                 "/*a_2^2*/-5\n" +
                 "/*a_3^2*/1\n" +
                 "/*a_4^2*/-1\n" +
+                "/*a_5^2*/0\n" +
+                
                 "/*a_1^3*/5\n" +
                 "/*a_2^3*/-7\n" +
                 "/*a_3^3*/1\n" +
                 "/*a_4^3*/1\n" +
-                "/*alpha_1*/69\n" +
+                "/*a_5^3*/0\n" +
+                
+                "/*alpha_1*/69\n" + //правая часть больших уравнений
                 "/*alpha_2*/58\n" +
-                "/*z_1*/1";
+                
+                "/*z_1*/1"; //правая часть маленьких уравнений
         
         Structure system = Converter.convert(file);
-        ArrayList<LinkedList<Edge>> spanningTree = new ArrayList<>();
-        for (LinkedList<Edge> flow:system.getFlows()){
-            spanningTree.add(GraphWorker.getSpanningTree(flow));
-        }
-        for (LinkedList<Edge> tree: spanningTree){
-            for (Edge e:tree){
-                System.out.print(e.getFrom()+"->"+e.getTo()+", ");
-            }
-            System.out.print("\n");
-        }
         System.out.println("OK");
     }
 }

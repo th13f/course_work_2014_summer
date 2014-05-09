@@ -34,4 +34,10 @@ public class GraphWorker {
         
         return spanningTree;
     }
+    
+    public static int[] getPArray(LinkedList<Edge> tree, int vertices){
+        int[] p = new int[vertices];
+        
+        return p;
+    }
 }

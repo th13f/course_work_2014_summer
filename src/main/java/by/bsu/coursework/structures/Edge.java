@@ -35,5 +35,8 @@ public class Edge {
         this.to = to;
     }
     
-    
+    @Override
+    public Edge clone(){
+        return new Edge(from,to);
+    }
 }

@@ -7,10 +7,14 @@
 
 
 import by.bsu.coursework.converter.Converter;
+import by.bsu.coursework.structures.Edge;
+import by.bsu.coursework.structures.GraphWorker;
 import by.bsu.coursework.structures.Structure;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.algorithms.shortestpath.MinimumSpanningForest;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -41,6 +45,7 @@ public class Starter {
                 "/*{3,4}*/\n" +
                 "/*{4,5}*/\n" +
                 "/*{5,3}*/\n" +
+                "/*{2,5}*/\n" +
                 "/*widetilde{U}_0*/\n" +
                 "/*{2,4}*/1\n" +
                 "/*widetilde{U}_0^1*/\n" +
@@ -92,24 +97,16 @@ public class Starter {
                 "/*z_1*/1";
         
         Structure system = Converter.convert(file);
+        ArrayList<LinkedList<Edge>> spanningTree = new ArrayList<>();
+        for (LinkedList<Edge> flow:system.getFlows()){
+            spanningTree.add(GraphWorker.getSpanningTree(flow));
+        }
+        for (LinkedList<Edge> tree: spanningTree){
+            for (Edge e:tree){
+                System.out.print(e.getFrom()+"->"+e.getTo()+", ");
+            }
+            System.out.print("\n");
+        }
         System.out.println("OK");
-        
-        
-        // Graph<V, E> where V is the type of the vertices 
-        // and E is the type of the edges
-        Graph<Integer, String> g = new SparseMultigraph<Integer, String>();
-        // Add some vertices. From above we defined these to be type Integer.
-        g.addVertex((Integer)1);
-        g.addVertex((Integer)2);
-        g.addVertex((Integer)3); 
-        // Add some edges. From above we defined these to be of type String
-        // Note that the default is for undirected edges.
-        g.addEdge("a", 1, 2); // Note that Java 1.5 auto-boxes primitives
-        g.addEdge("b", 2, 3); 
-        g.addEdge("c", 1, 3); 
-        // Let's see what we have. Note the nice output from the
-        // SparseMultigraph<V,E> toString() method
-        System.out.println("The graph g = " + g.toString());
-        new MinimumSpanningForest(g, null, g);
     }
 }

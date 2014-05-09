@@ -17,7 +17,7 @@ import java.util.LinkedList;
 public class Structure {
     private LinkedList<Edge> cyclicEdges;
     private LinkedList<Edge> nonBasicEdges;
-    private ArrayList<LinkedList<Edge>> graphes;
+    private ArrayList<LinkedList<Edge>> flows;
     private ArrayList<LinkedList<Lambda>> bigEquations;
     private ArrayList<ArrayList<Integer>> alphas;
     
@@ -27,11 +27,11 @@ public class Structure {
     public Structure(int types, int vertices) {
         this.types = types;
         this.vertices = vertices;
-        graphes = new ArrayList<>(types);
+        flows = new ArrayList<>(types);
         bigEquations = new ArrayList<>(types);
         alphas = new ArrayList<>(types);
         for (int i=0; i<types; i++){
-            graphes.add(new LinkedList<Edge>());
+            flows.add(new LinkedList<Edge>());
             bigEquations.add(new LinkedList<Lambda>());
             alphas.add(new ArrayList<Integer>(vertices));
             for (int j=0; j<vertices; j++){
@@ -41,7 +41,7 @@ public class Structure {
     }
     
     public void addEdge(Edge edge, int flow){
-        graphes.get(flow).add(edge);
+        flows.get(flow).add(edge);
         Logger.info("Edge: "+edge.getFrom()+" -> "+edge.getTo()+" flow="+flow);
     }
     
@@ -53,5 +53,9 @@ public class Structure {
     public void addLambda(int from, int to, int flow, int equation, int value){
         bigEquations.get(equation).add(new Lambda(from,to,flow,value));
         Logger.info("Lambda: "+from+" -> "+to+" equation="+equation+" flow="+flow+" value="+value);
+    }
+    
+    public ArrayList<LinkedList<Edge>> getFlows(){
+        return flows;
     }
 }

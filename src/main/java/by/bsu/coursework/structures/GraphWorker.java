@@ -40,12 +40,20 @@ public class GraphWorker {
     
     public static Integer[] getPArray(LinkedList<Edge> tree, LinkedList<Edge> newTree, int root, int verticesCount){
         Integer[] p = new Integer[verticesCount];
-        LinkedList<Edge> tmpEdges = new LinkedList<>();
+        LinkedList<Edge> tmpEdges;
+        LinkedList<Edge> edges;
+        LinkedList<Edge> tmpEdges1 = new LinkedList<>();
+        LinkedList<Edge> tmpEdges2 = new LinkedList<>();
         Stack<Integer> vertices = new Stack<>();
+        
+        int edgesIdentifier=1;
+        edges=tmpEdges1;
+        tmpEdges=tmpEdges2;
         
         for(Edge e:tree){
             tmpEdges.add(e);
         }
+        edges=(LinkedList)tmpEdges.clone();
         
         for (int i=0; i<verticesCount; i++){
             p[i] = -2;
@@ -54,25 +62,57 @@ public class GraphWorker {
         
         int current = root;
         while (!tmpEdges.isEmpty()){
-            for (Edge e:tmpEdges){
+            for (Edge e:edges){
                 if (e.getTo() == current){
                     p[e.getFrom()] = current;
                     vertices.push(e.getFrom());
                     newTree.add(e.clone());
                     tmpEdges.remove(e);
-                    break;
                 }
                 else if (e.getFrom() == current){
                     p[e.getTo()] = current;
                     vertices.push(e.getTo());
                     newTree.add(new Edge(e.getTo(),e.getFrom()));
                     tmpEdges.remove(e);
-                    break;
                 }
             }
-            current = vertices.pop();
+            current = vertices.pop();   
+            edges=(LinkedList)tmpEdges.clone();
         }
         
         return p;
+    }
+    
+    public static void work(Integer[] pArray, LinkedList<Integer> tArray, int current, int size){
+        if (tArray.size()==size)
+            return;
+        
+        for (int i=0; i<pArray.length; i++){
+            if (pArray[i]==current){
+                tArray.add(i);
+                work(pArray, tArray,i,size);
+            }
+        }
+    }
+    
+    public static LinkedList<Integer> getTArray(LinkedList<Edge> tree, Integer[] pArray){
+        int verticesCount = pArray.length;
+        int size=0;
+        LinkedList<Integer> tmp = new LinkedList<>();
+        int root = -1;
+        int current;
+        for(int i=0; i<verticesCount; i++){
+            if (pArray[i]==-1){
+                root = i;
+            }
+            if (pArray[i]!=-2)
+                size++;
+        }
+        current = root;
+        tmp.push(root);
+        
+        work(pArray,tmp,current,size);
+        
+        return tmp;
     }
 }

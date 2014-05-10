@@ -8,7 +8,9 @@ package by.bsu.coursework.structures;
 
 import by.bsu.coursework.Logger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -21,6 +23,7 @@ public class Structure {
     private ArrayList<ArrayList<Integer>> alphas;
     private ArrayList<LinkedList<Edge>> spanningTrees;
     private ArrayList<Integer[]> pArrays;
+    private ArrayList<LinkedList<Integer>> tArrays;
     private ArrayList<Integer> roots;
     
     private int types;
@@ -36,6 +39,7 @@ public class Structure {
         cyclicEdges = new ArrayList<>(types);
         spanningTrees = new ArrayList<>(types);
         pArrays = new ArrayList<>(types);
+        tArrays = new ArrayList<>(types);
         roots = new ArrayList<>(types);
         for (int i=0; i<types; i++){
             flows.add(new LinkedList<Edge>());
@@ -52,7 +56,10 @@ public class Structure {
         for (LinkedList<Edge> flow:flows){
             LinkedList<Edge> tree = GraphWorker.getSpanningTree(flow);
             LinkedList<Edge> newTree = new LinkedList<>();
-            pArrays.add(GraphWorker.getPArray(tree, newTree, tree.get(0).getTo(), vertices));
+            Integer[] pArray = GraphWorker.getPArray(tree, newTree, tree.get(0).getTo(), vertices);
+            LinkedList<Integer> tArray = GraphWorker.getTArray(newTree,pArray);
+            pArrays.add(pArray);
+            tArrays.add(tArray);
             roots.add(tree.get(0).getTo());
         }
     }
@@ -90,6 +97,16 @@ public class Structure {
 
     public Integer[] getpArray(int i) {
         return pArrays.get(i);
+    }
+    
+    public List<Integer> gettArray(int i) {
+        return tArrays.get(i);
+    }
+    
+    public List<Integer> gettArrayInversed(int i) {
+        LinkedList<Integer> tmp = (LinkedList)tArrays.get(i).clone();
+        Collections.reverse(tmp);
+        return tmp;
     }
     
     public int getRoot(int i) {

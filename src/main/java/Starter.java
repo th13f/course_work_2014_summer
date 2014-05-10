@@ -34,7 +34,7 @@ public class Starter {
                 "/*{3,4}*/\n" +
                 "/*{4,5}*/\n" +
                 "/*{5,3}*/\n" +
-                "/*{1,3}*/\n" +
+                "/*{3,1}*/\n" +
                 
                 "/*widetilde{U}^3*/\n" +
                 "/*{2,3}*/\n" +
@@ -111,9 +111,9 @@ public class Starter {
         
         Structure system = Converter.convert(file);
         system.calculate();
-        int flow=1;
-        for (int i=0; i<system.gettArray(flow).size(); i++){
-            System.out.print(system.gettArray(flow).get(i)+",");
+        int flow=0;
+        for (int i=0; i<system.getVertices(); i++){
+            System.out.print(system.getdArray(flow)[i]+",");
         }
         System.out.println("\nroot="+system.getRoot(flow));
         System.out.println("OK");

@@ -46,10 +46,8 @@ public class GraphWorker {
         LinkedList<Edge> tmpEdges2 = new LinkedList<>();
         Stack<Integer> vertices = new Stack<>();
         
-        int edgesIdentifier=1;
         edges=tmpEdges1;
         tmpEdges=tmpEdges2;
-        
         for(Edge e:tree){
             tmpEdges.add(e);
         }
@@ -114,5 +112,27 @@ public class GraphWorker {
         work(pArray,tmp,current,size);
         
         return tmp;
+    }
+    
+    public static Integer[] getDArray(LinkedList<Edge> flow, LinkedList<Edge> tree, int root, int size){
+        Integer[] d = new Integer[size];
+        for (int i=0; i<size; i++){
+            d[i]=-2;
+        }
+        d[root]=0;
+        for (Edge t:tree){
+            for (Edge f:flow){
+                if (t.getFrom()==f.getFrom() && t.getTo()==f.getTo()){
+                    d[t.getFrom()]=1;
+                    break;
+                }
+                else if (t.getFrom()==f.getTo() && t.getTo()==f.getFrom()){
+                    d[t.getFrom()]=-1;
+                    break;
+                }
+            }
+        }
+        
+        return d;
     }
 }

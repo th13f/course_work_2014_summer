@@ -23,6 +23,7 @@ public class Structure {
     private ArrayList<ArrayList<Integer>> alphas;
     private ArrayList<LinkedList<Edge>> spanningTrees;
     private ArrayList<Integer[]> pArrays;
+    private ArrayList<Integer[]> dArrays;
     private ArrayList<LinkedList<Integer>> tArrays;
     private ArrayList<Integer> roots;
     
@@ -39,6 +40,7 @@ public class Structure {
         cyclicEdges = new ArrayList<>(types);
         spanningTrees = new ArrayList<>(types);
         pArrays = new ArrayList<>(types);
+        dArrays = new ArrayList<>(types);
         tArrays = new ArrayList<>(types);
         roots = new ArrayList<>(types);
         for (int i=0; i<types; i++){
@@ -58,9 +60,12 @@ public class Structure {
             LinkedList<Edge> newTree = new LinkedList<>();
             Integer[] pArray = GraphWorker.getPArray(tree, newTree, tree.get(0).getTo(), vertices);
             LinkedList<Integer> tArray = GraphWorker.getTArray(newTree,pArray);
+            int root = tree.get(0).getTo();
+            Integer[] dArray = GraphWorker.getDArray(flow,newTree,root,vertices);
             pArrays.add(pArray);
             tArrays.add(tArray);
-            roots.add(tree.get(0).getTo());
+            dArrays.add(dArray);
+            roots.add(root);
         }
     }
     
@@ -107,6 +112,10 @@ public class Structure {
         LinkedList<Integer> tmp = (LinkedList)tArrays.get(i).clone();
         Collections.reverse(tmp);
         return tmp;
+    }
+    
+    public Integer[] getdArray(int i) {
+        return dArrays.get(i);
     }
     
     public int getRoot(int i) {

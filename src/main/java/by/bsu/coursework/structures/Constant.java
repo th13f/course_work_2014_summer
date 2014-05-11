@@ -17,12 +17,10 @@ public class Constant implements EquationPart{
 
     @Override
     public String toString() {
-        String result;
+        String result="";
         if (value>=0)
             result="+";
-        else
-            result="-";
-        return result+value;
+        return result+(int)value;
     }
 
     @Override

@@ -1,6 +1,9 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
+ *//*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package by.bsu.coursework.structures;
 
@@ -14,7 +17,7 @@ import java.util.Stack;
  * @author th13f
  */
 public class GraphWorker {
-    public static LinkedList<Edge> getSpanningTree(LinkedList<Edge> graph){
+    public static LinkedList<Edge> getModifiedSpanningTree(LinkedList<Edge> graph){
         LinkedList<Edge> spanningTree = new LinkedList<>();
         LinkedList<Integer> vertices = new LinkedList<>();
         
@@ -134,5 +137,19 @@ public class GraphWorker {
         }
         
         return d;
+    }
+
+    static LinkedList<Edge> getSpanningTree(LinkedList<Edge> tree, LinkedList<Edge> newTree) {
+        LinkedList<Edge> realTree = new LinkedList<Edge>();
+        
+        for (Edge t:newTree){
+            for (Edge f:tree){
+                if ((t.getFrom()==f.getFrom() && t.getTo()==f.getTo()) || (t.getFrom()==f.getTo() && t.getTo()==f.getFrom())){
+                    realTree.add(f);
+                }
+            }
+        }
+        
+        return realTree;
     }
 }

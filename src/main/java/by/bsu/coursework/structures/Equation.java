@@ -11,8 +11,8 @@ import java.util.LinkedList;
  * @author th13f
  */
 public class Equation {
-    private LinkedList<EquationPart> leftPart;
-    private LinkedList<EquationPart> rightPart;
+    private final LinkedList<EquationPart> leftPart;
+    private final LinkedList<EquationPart> rightPart;
 
     public Equation() {
         leftPart=new LinkedList<>();
@@ -24,7 +24,7 @@ public class Equation {
     }
     
     public void addToRight(EquationPart var){
-        leftPart.add(var);
+        rightPart.add(var);
     }
 
     @Override
@@ -32,6 +32,8 @@ public class Equation {
         String result = "";
         for(EquationPart v:leftPart)
             result+=v.toString();
+        if (leftPart.isEmpty())
+            result+= "0";
         result+=" = ";
         for(EquationPart v:rightPart)
             result+=v.toString();

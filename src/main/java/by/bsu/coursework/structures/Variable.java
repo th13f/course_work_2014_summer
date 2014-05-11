@@ -31,7 +31,10 @@ public class Variable implements EquationPart{
             result = "-";
         }
         
-        return result+Math.abs(coefficient)+name+topIndex+"_"+subIndex;
+        if (Math.abs((int)coefficient)==1)
+            return result+name+topIndex+"_"+subIndex;
+        
+        return result+Math.abs((int)coefficient)+name+topIndex+"_"+subIndex;
     }
 
     @Override

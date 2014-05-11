@@ -26,6 +26,7 @@ public class Structure {
     private ArrayList<Integer[]> dArrays;
     private ArrayList<LinkedList<Integer>> tArrays;
     private ArrayList<Integer> roots;
+    private ArrayList<ArrayList<Equation>> systems;
     
     private int types;
     private int vertices;
@@ -43,29 +44,51 @@ public class Structure {
         dArrays = new ArrayList<>(types);
         tArrays = new ArrayList<>(types);
         roots = new ArrayList<>(types);
+        systems = new ArrayList<>(types);
         for (int i=0; i<types; i++){
             flows.add(new LinkedList<Edge>());
             cyclicEdges.add(new LinkedList<Edge>());
             bigEquations.add(new LinkedList<Lambda>());
             alphas.add(new ArrayList<Integer>(vertices));
             for (int j=0; j<vertices; j++){
-                alphas.get(i).add(0);
+                alphas.get(i).add((Integer)0);
             }
         }
     }
     
     public void calculate() {
+        int flowIndex=0;
         for (LinkedList<Edge> flow:flows){
-            LinkedList<Edge> tree = GraphWorker.getSpanningTree(flow);
+            LinkedList<Edge> tree = GraphWorker.getModifiedSpanningTree(flow);
             LinkedList<Edge> newTree = new LinkedList<>();
             Integer[] pArray = GraphWorker.getPArray(tree, newTree, tree.get(0).getTo(), vertices);
             LinkedList<Integer> tArray = GraphWorker.getTArray(newTree,pArray);
             int root = tree.get(0).getTo();
             Integer[] dArray = GraphWorker.getDArray(flow,newTree,root,vertices);
+            spanningTrees.add(GraphWorker.getSpanningTree(tree,newTree));
             pArrays.add(pArray);
             tArrays.add(tArray);
             dArrays.add(dArray);
             roots.add(root);
+            ArrayList<Equation> system = new ArrayList<>(vertices);
+            for (int i=0; i<vertices; i++){
+                Equation eq = new Equation();
+                for (Edge e: flows.get(flowIndex)){
+                    if(e.getTo()==i){
+                        eq.addToLeft(new Variable("x", e.getFrom()+","+e.getTo(), ""+flowIndex, -1));
+                    }
+                    if (e.getFrom()==i){
+                        eq.addToLeft(new Variable("x", e.getFrom()+","+e.getTo(), ""+flowIndex, 1));
+                    }
+                }
+                eq.addToRight(new Constant(alphas.get(flowIndex).get(i)));
+                Logger.info(eq.toString());
+                system.add(eq);
+            }
+            systems.add(system);
+            Logger.info("");
+            
+            flowIndex++;
         }
     }
     

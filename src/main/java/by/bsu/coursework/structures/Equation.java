@@ -26,6 +26,11 @@ public class Equation {
     public void addToRight(EquationPart var){
         rightPart.add(var);
     }
+    
+    public void zeroRight(){
+        rightPart.clear();
+        rightPart.add(new Constant(0));
+    }
 
     @Override
     public String toString() {
@@ -61,6 +66,19 @@ public class Equation {
             to.add(var.inversed());
         }
         simplify(to);
+        for(int i=0; i<to.size(); i++){
+            if (to.get(i).getType().equals("Variable")){
+                Variable current = (Variable)to.get(i);
+                if (current.getName().equals(what.getName()) &&
+                    current.getSubIndex().equals(what.getSubIndex()) &&
+                    current.getTopIndex().equals(what.getTopIndex())){
+                    
+                    to.remove(current);
+                    break;
+                }
+            }
+        }
+        
         result.setTo(to);
         
         return result;
@@ -68,56 +86,66 @@ public class Equation {
     
     public void insert(Commutation what){
         for (int i=0; i<leftPart.size();){
-            if (what.getFrom().getName().equals(what.getFrom().getName()) &&
-                what.getFrom().getSubIndex().equals(what.getFrom().getSubIndex()) &&
-                what.getFrom().getTopIndex().equals(what.getFrom().getTopIndex())){
-                double alpha = leftPart.get(i).getCoefficient();
-                leftPart.remove(leftPart.get(i));
-                for (EquationPart var:what.getTo()){
-                    switch (var.getType()) {
-                        case "Variable":
-                            leftPart.add(new Variable(
-                                    ((Variable)var).getName(),
-                                    ((Variable)var).getSubIndex(),
-                                    ((Variable)var).getTopIndex(),
-                                    ((Variable)var).getCoefficient()*alpha));
-                            break;
-                        case "Constant":
-                            leftPart.add(new Constant(
-                                    ((Variable)var).getCoefficient()*alpha));
-                            break;
+            if (leftPart.get(i).getType().equals("Variable")){
+                Variable current = (Variable) leftPart.get(i);
+                if (current.getName().equals(what.getFrom().getName()) &&
+                    current.getSubIndex().equals(what.getFrom().getSubIndex()) &&
+                    current.getTopIndex().equals(what.getFrom().getTopIndex())){
+                    double alpha = leftPart.get(i).getCoefficient();
+                    leftPart.remove(leftPart.get(i));
+                    for (EquationPart var:what.getTo()){
+                        switch (var.getType()) {
+                            case "Variable":
+                                leftPart.add(new Variable(
+                                        ((Variable)var).getName(),
+                                        ((Variable)var).getSubIndex(),
+                                        ((Variable)var).getTopIndex(),
+                                        ((Variable)var).getCoefficient()*alpha));
+                                break;
+                            case "Constant":
+                                leftPart.add(new Constant(
+                                        ((Constant)var).getCoefficient()*alpha));
+                                break;
+                        }
                     }
                 }
+                else{
+                    i++;
+                }
             }
-            else{
+            else
                 i++;
-            }
-        }
+        }   
         for (int i=0; i<rightPart.size();){
-            if (what.getFrom().getName().equals(what.getFrom().getName()) &&
-                what.getFrom().getSubIndex().equals(what.getFrom().getSubIndex()) &&
-                what.getFrom().getTopIndex().equals(what.getFrom().getTopIndex())){
-                double alpha = rightPart.get(i).getCoefficient();
-                rightPart.remove(rightPart.get(i));
-                for (EquationPart var:what.getTo()){
-                    switch (var.getType()) {
-                        case "Variable":
-                            rightPart.add(new Variable(
-                                    ((Variable)var).getName(),
-                                    ((Variable)var).getSubIndex(),
-                                    ((Variable)var).getTopIndex(),
-                                    ((Variable)var).getCoefficient()*alpha));
-                            break;
-                        case "Constant":
-                            rightPart.add(new Constant(
-                                    ((Variable)var).getCoefficient()*alpha));
-                            break;
+            if (rightPart.get(i).getType().equals("Variable")){
+            Variable current = (Variable) rightPart.get(i);
+            if (current.getName().equals(what.getFrom().getName()) &&
+                    current.getSubIndex().equals(what.getFrom().getSubIndex()) &&
+                    current.getTopIndex().equals(what.getFrom().getTopIndex())){
+                    double alpha = rightPart.get(i).getCoefficient();
+                    rightPart.remove(rightPart.get(i));
+                    for (EquationPart var:what.getTo()){
+                        switch (var.getType()) {
+                            case "Variable":
+                                rightPart.add(new Variable(
+                                        ((Variable)var).getName(),
+                                        ((Variable)var).getSubIndex(),
+                                        ((Variable)var).getTopIndex(),
+                                        ((Variable)var).getCoefficient()*alpha));
+                                break;
+                            case "Constant":
+                                rightPart.add(new Constant(
+                                        ((Variable)var).getCoefficient()*alpha));
+                                break;
+                        }
                     }
                 }
+                else{
+                    i++;
+                }
             }
-            else{
+            else
                 i++;
-            }
         }
     }
 }

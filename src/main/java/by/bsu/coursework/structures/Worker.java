@@ -4,9 +4,17 @@
  *//*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
+ *//*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ *//*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package by.bsu.coursework.structures;
 
+import by.bsu.coursework.Logger;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -16,7 +24,7 @@ import java.util.Stack;
  *
  * @author th13f
  */
-public class GraphWorker {
+public class Worker {
     public static LinkedList<Edge> getModifiedSpanningTree(LinkedList<Edge> graph){
         LinkedList<Edge> spanningTree = new LinkedList<>();
         LinkedList<Integer> vertices = new LinkedList<>();
@@ -152,4 +160,42 @@ public class GraphWorker {
         
         return realTree;
     }
+    
+    static LinkedList<Edge> getCyclicEdges(LinkedList<Edge> flow, LinkedList<Edge> tree){
+        LinkedList<Edge> edges = (LinkedList) flow.clone();
+        
+        for (Edge t:tree){
+            for (Edge e:edges){
+                if ((t.getFrom()==e.getFrom() && t.getTo()==e.getTo())){
+                    edges.remove(e);
+                    break;
+                }
+            }
+        }
+        
+        return edges;
+    }
+    
+    static ArrayList<Equation> getSystem(LinkedList<Edge> flow, int vertices,int flowIndex,ArrayList<Integer> alphas){
+        ArrayList<Equation> system = new ArrayList<>(vertices);
+        for (int i=0; i<vertices; i++){
+            Equation eq = new Equation();
+            for (Edge e:flow){
+                if(e.getTo()==i){
+                    eq.addToLeft(new Variable("x", e.getFrom()+","+e.getTo(), ""+flowIndex, -1));
+                }
+                if (e.getFrom()==i){
+                    eq.addToLeft(new Variable("x", e.getFrom()+","+e.getTo(), ""+flowIndex, 1));
+                }
+            }
+            eq.addToRight(new Constant(alphas.get(i)));
+            Logger.info(eq.toString());
+            system.add(eq);
+        }
+        Logger.info("");
+
+        return system;
+    }
+    
+    
 }

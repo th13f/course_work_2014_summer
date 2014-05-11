@@ -50,7 +50,7 @@ public class Variable implements EquationPart{
     public String getName() {
         return name;
     }
-
+    
     public String getSubIndex() {
         return subIndex;
     }

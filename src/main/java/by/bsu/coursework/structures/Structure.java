@@ -85,6 +85,16 @@ public class Structure {
                     gettArrayInversed(flowIndex),
                     getpArray(flowIndex),
                     getdArray(flowIndex));
+            calculateParticleSolve(
+                    flowIndex, 
+                    flows, 
+                    characteristicVectors, 
+                    cyclicEdge, 
+                    spanningTree, 
+                    systems, 
+                    gettArrayInversed(flowIndex),
+                    getpArray(flowIndex),
+                    getdArray(flowIndex));
             
             flowIndex++;
         }
@@ -145,6 +155,54 @@ public class Structure {
                 System.out.println(com);
             System.out.println("");
         }
+    }
+    
+    static void calculateParticleSolve(
+            int flowIndex, 
+            ArrayList<LinkedList<Edge>> flows, 
+            LinkedList<CharacteristicVector> vectors, 
+            LinkedList<Edge> cyclicEdges, 
+            LinkedList<Edge> spanningTree, 
+            ArrayList<ArrayList<Equation>> systems,
+            List<Integer> t,
+            Integer[] p,
+            Integer[] d){
+        LinkedList<Edge> flow = flows.get(flowIndex);
+        
+        Edge edge = new Edge(-1,-1);
+        CharacteristicVector vector = new CharacteristicVector(flowIndex,edge.toString());
+
+        ArrayList<Equation> system = (ArrayList)systems.get(flowIndex).clone();
+        
+        for (Edge e:cyclicEdges){
+            Commutation tmp = new Commutation(new Variable("x",e.toString(),""+flowIndex,1));
+            tmp.addTo(new Constant(0));
+            vector.addCommutation(tmp);
+        }
+
+        for (Equation e:system)
+        {
+            for (Commutation com:vector.getContent()){
+                e.insert(com);
+            }
+        }
+
+        for (int j=0; j<t.size()-1; j++){
+            Commutation com;
+            if (d[t.get(j)]==1){
+                 com = system.get(t.get(j)).solve(new Variable("x",t.get(j)+","+p[t.get(j)],""+flowIndex,1));
+            }
+            else{
+                 com = system.get(t.get(j)).solve(new Variable("x",p[t.get(j)]+","+t.get(j),""+flowIndex,1));
+            }
+
+            vector.addCommutation(com);
+        }
+
+        for(Commutation com:vector.getContent())
+            System.out.println(com);
+        System.out.println("");
+        
     }
     
     public void addEdge(Edge edge, int flow){

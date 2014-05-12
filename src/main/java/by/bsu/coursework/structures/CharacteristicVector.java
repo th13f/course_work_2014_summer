@@ -30,4 +30,12 @@ public class CharacteristicVector {
     public LinkedList<Commutation> getContent() {
         return content;
     }
+
+    @Override
+    public String toString() {
+        String result = "Commutation"+flow+"_"+index+'\n';
+        for(Commutation com:content)
+                result+=com.toString()+'\n';
+        return result;
+    }
 }

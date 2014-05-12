@@ -132,10 +132,10 @@ public class Structure {
                 }
             }
             
-            for (Equation e:system)
+            for (int systemIndex = 0; systemIndex<system.size();systemIndex++)
             {
                 for (Commutation com:vector.getContent()){
-                    e.insert(com);
+                    system.get(systemIndex).insert(com);
                 }
             }
             
@@ -151,9 +151,7 @@ public class Structure {
                 vector.addCommutation(com);
             }
             
-            for(Commutation com:vector.getContent())
-                System.out.println(com);
-            System.out.println("");
+            System.out.println(vector.toString());
         }
     }
     
@@ -169,7 +167,7 @@ public class Structure {
             Integer[] d){
         LinkedList<Edge> flow = flows.get(flowIndex);
         
-        Edge edge = new Edge(-1,-1);
+        Edge edge = new Edge(0,0);
         CharacteristicVector vector = new CharacteristicVector(flowIndex,edge.toString());
 
         ArrayList<Equation> system = (ArrayList)systems.get(flowIndex).clone();
@@ -199,9 +197,7 @@ public class Structure {
             vector.addCommutation(com);
         }
 
-        for(Commutation com:vector.getContent())
-            System.out.println(com);
-        System.out.println("");
+        System.out.println(vector.toString());
         
     }
     

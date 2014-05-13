@@ -19,6 +19,11 @@ public class Equation {
         rightPart=new LinkedList<>();
     }
     
+    public Equation(LinkedList<EquationPart> leftPart, LinkedList<EquationPart> rightPart) {
+        this.leftPart=new LinkedList<>(leftPart);
+        this.rightPart=new LinkedList<>(rightPart);
+    }
+    
     public void addToLeft(EquationPart var){
         leftPart.add(var);
     }
@@ -147,5 +152,9 @@ public class Equation {
             else
                 i++;
         }
+    }
+
+    Equation copy() {
+        return new Equation(this.leftPart,this.rightPart);
     }
 }

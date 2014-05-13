@@ -75,9 +75,9 @@ public class Structure {
             roots.add(root);
             systems.add(Worker.getSystem(flow, vertices, flowIndex, alphas.get(flowIndex)));
             cyclicEdges.add(cyclicEdge);
+            
             calculateCharacteristicVectors(
                     flowIndex, 
-                    flows, 
                     characteristicVectors, 
                     cyclicEdge, 
                     spanningTree, 
@@ -85,9 +85,9 @@ public class Structure {
                     gettArrayInversed(flowIndex),
                     getpArray(flowIndex),
                     getdArray(flowIndex));
+            
             calculateParticleSolve(
                     flowIndex, 
-                    flows, 
                     characteristicVectors, 
                     cyclicEdge, 
                     spanningTree, 
@@ -102,7 +102,6 @@ public class Structure {
     
     static void calculateCharacteristicVectors(
             int flowIndex, 
-            ArrayList<LinkedList<Edge>> flows, 
             LinkedList<CharacteristicVector> vectors, 
             LinkedList<Edge> cyclicEdges, 
             LinkedList<Edge> spanningTree, 
@@ -110,7 +109,6 @@ public class Structure {
             List<Integer> t,
             Integer[] p,
             Integer[] d){
-        LinkedList<Edge> flow = flows.get(flowIndex);
         
         for (int i=0; i<cyclicEdges.size(); i++){
             Edge edge = cyclicEdges.get(i);
@@ -120,9 +118,12 @@ public class Structure {
             mainEdge.addTo(new Constant(1));
             vector.addCommutation(mainEdge);
             
-            ArrayList<Equation> system = (ArrayList)systems.get(flowIndex).clone();
-            for (Equation e:system)
-                e.zeroRight();
+            ArrayList<Equation> system = new ArrayList<>();
+            for (Equation e:systems.get(flowIndex)){
+                Equation eq = e.copy();
+                eq.zeroRight();
+                system.add(eq);
+            }
             
             for (Edge e:cyclicEdges){
                 if (!e.equals(edge)){
@@ -157,7 +158,6 @@ public class Structure {
     
     static void calculateParticleSolve(
             int flowIndex, 
-            ArrayList<LinkedList<Edge>> flows, 
             LinkedList<CharacteristicVector> vectors, 
             LinkedList<Edge> cyclicEdges, 
             LinkedList<Edge> spanningTree, 
@@ -165,12 +165,14 @@ public class Structure {
             List<Integer> t,
             Integer[] p,
             Integer[] d){
-        LinkedList<Edge> flow = flows.get(flowIndex);
         
         Edge edge = new Edge(0,0);
         CharacteristicVector vector = new CharacteristicVector(flowIndex,edge.toString());
 
-        ArrayList<Equation> system = (ArrayList)systems.get(flowIndex).clone();
+        ArrayList<Equation> system = new ArrayList<>();
+            for (Equation e:systems.get(flowIndex)){
+                system.add(e.copy());
+            }
         
         for (Edge e:cyclicEdges){
             Commutation tmp = new Commutation(new Variable("x",e.toString(),""+flowIndex,1));

@@ -16,10 +16,15 @@ public class Constant implements EquationPart{
     }
 
     @Override
-    public String toString() {
+    public String toString(){
+        return toString(true);
+    }
+    
+    public String toString(boolean hasSign) {
         String result="";
         if (value>=0)
-            result="+";
+            if (hasSign)
+                result="+";
         return result+(int)value;
     }
 
@@ -49,5 +54,10 @@ public class Constant implements EquationPart{
     @Override
     public void setCoefficient(double coeff){
         this.value = coeff;
+    }
+
+    @Override
+    public void divide(double divider) {
+        this.value/=divider;
     }
 }

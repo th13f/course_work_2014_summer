@@ -9,8 +9,7 @@ package by.bsu.coursework.structures;
  * @author th13f
  */
 public interface EquationPart {
-    @Override
-    public String toString();
+    public String toString(boolean viewSign);
     
     public EquationPart inversed();
     
@@ -18,4 +17,6 @@ public interface EquationPart {
     
     public double getCoefficient();
     public void setCoefficient(double coeff);
+    
+    public void divide(double divider);
 }

@@ -40,13 +40,25 @@ public class Equation {
     @Override
     public String toString() {
         String result = "";
-        for(EquationPart v:leftPart)
-            result+=v.toString();
+        
         if (leftPart.isEmpty())
             result+= "0";
+        else{
+            result+=leftPart.get(0).toString(false);
+            for(int i=1; i<leftPart.size(); i++)
+                result+=leftPart.get(i).toString();
+        }
+        
         result+=" = ";
-        for(EquationPart v:rightPart)
-            result+=v.toString();
+        
+        if (rightPart.isEmpty())
+            result+= "0";
+        else{
+            result+=rightPart.get(0).toString(false);
+            for(int i=1; i<rightPart.size(); i++)
+                result+=rightPart.get(i).toString();
+        }
+        
         return result;
     }
     
@@ -67,22 +79,25 @@ public class Equation {
         Commutation result = new Commutation(what);
         
         LinkedList<EquationPart> to = (LinkedList)rightPart.clone();
+        double coefficient=1;
+        
         for (EquationPart var:leftPart){
-            to.add(var.inversed());
-        }
-        simplify(to);
-        for(int i=0; i<to.size(); i++){
-            if (to.get(i).getType().equals("Variable")){
-                Variable current = (Variable)to.get(i);
+            if (var.getType().equals("Variable")){
+                Variable current = (Variable) var;
                 if (current.getName().equals(what.getName()) &&
                     current.getSubIndex().equals(what.getSubIndex()) &&
                     current.getTopIndex().equals(what.getTopIndex())){
                     
-                    to.remove(current);
-                    break;
+                    coefficient = var.getCoefficient();
                 }
             }
+            else
+                to.add(var.inversed());
         }
+        simplify(to);
+        
+        for (EquationPart ep:to)
+            ep.divide(coefficient);
         
         result.setTo(to);
         

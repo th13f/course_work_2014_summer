@@ -22,10 +22,15 @@ public class Variable implements EquationPart{
     }
 
     @Override
-    public String toString() {
-        String result;
+    public String toString(){
+        return toString(true);
+    }
+    
+    public String toString(boolean hasSign) {
+        String result="";
         if (coefficient>=0){
-            result = "+";
+            if (hasSign)
+                result = "+";
         }
         else{
             result = "-";
@@ -67,5 +72,10 @@ public class Variable implements EquationPart{
     @Override
     public void setCoefficient(double coeff){
         this.coefficient = coeff;
+    }
+
+    @Override
+    public void divide(double divider) {
+        this.coefficient/=divider;
     }
 }

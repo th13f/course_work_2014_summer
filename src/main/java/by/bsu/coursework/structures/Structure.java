@@ -76,7 +76,7 @@ public class Structure {
             systems.add(Worker.getSystem(flow, vertices, flowIndex, alphas.get(flowIndex)));
             cyclicEdges.add(cyclicEdge);
             
-            calculateCharacteristicVectors(
+            CharacteristicVector.calculateCharacteristicVectors(
                     flowIndex, 
                     characteristicVectors, 
                     cyclicEdge, 
@@ -84,9 +84,10 @@ public class Structure {
                     systems, 
                     gettArrayInversed(flowIndex),
                     getpArray(flowIndex),
-                    getdArray(flowIndex));
+                    getdArray(flowIndex),
+                    characteristicVectors);
             
-            calculateParticleSolve(
+            CharacteristicVector.calculateParticleSolve(
                     flowIndex, 
                     characteristicVectors, 
                     cyclicEdge, 
@@ -94,114 +95,16 @@ public class Structure {
                     systems, 
                     gettArrayInversed(flowIndex),
                     getpArray(flowIndex),
-                    getdArray(flowIndex));
+                    getdArray(flowIndex),
+                    characteristicVectors);
             
             flowIndex++;
         }
+        
+        for (CharacteristicVector vector:characteristicVectors)
+            System.out.println(vector);
     }
     
-    static void calculateCharacteristicVectors(
-            int flowIndex, 
-            LinkedList<CharacteristicVector> vectors, 
-            LinkedList<Edge> cyclicEdges, 
-            LinkedList<Edge> spanningTree, 
-            ArrayList<ArrayList<Equation>> systems,
-            List<Integer> t,
-            Integer[] p,
-            Integer[] d){
-        
-        for (int i=0; i<cyclicEdges.size(); i++){
-            Edge edge = cyclicEdges.get(i);
-            CharacteristicVector vector = new CharacteristicVector(flowIndex,edge.toString());
-            
-            Commutation mainEdge = new Commutation(new Variable("x",edge.toString(),""+flowIndex,1));
-            mainEdge.addTo(new Constant(1));
-            vector.addCommutation(mainEdge);
-            
-            ArrayList<Equation> system = new ArrayList<>();
-            for (Equation e:systems.get(flowIndex)){
-                Equation eq = e.copy();
-                eq.zeroRight();
-                system.add(eq);
-            }
-            
-            for (Edge e:cyclicEdges){
-                if (!e.equals(edge)){
-                    Commutation tmp = new Commutation(new Variable("x",e.toString(),""+flowIndex,1));
-                    tmp.addTo(new Constant(0));
-                    vector.addCommutation(tmp);
-                }
-            }
-            
-            for (int systemIndex = 0; systemIndex<system.size();systemIndex++)
-            {
-                for (Commutation com:vector.getContent()){
-                    system.get(systemIndex).insert(com);
-                }
-            }
-            
-            for (int j=0; j<t.size()-1; j++){
-                Commutation com;
-                if (d[t.get(j)]==1){
-                     com = system.get(t.get(j)).solve(new Variable("x",t.get(j)+","+p[t.get(j)],""+flowIndex,1));
-                }
-                else{
-                     com = system.get(t.get(j)).solve(new Variable("x",p[t.get(j)]+","+t.get(j),""+flowIndex,1));
-                }
-                
-                vector.addCommutation(com);
-            }
-            
-            System.out.println(vector.toString());
-        }
-    }
-    
-    static void calculateParticleSolve(
-            int flowIndex, 
-            LinkedList<CharacteristicVector> vectors, 
-            LinkedList<Edge> cyclicEdges, 
-            LinkedList<Edge> spanningTree, 
-            ArrayList<ArrayList<Equation>> systems,
-            List<Integer> t,
-            Integer[] p,
-            Integer[] d){
-        
-        Edge edge = new Edge(0,0);
-        CharacteristicVector vector = new CharacteristicVector(flowIndex,edge.toString());
-
-        ArrayList<Equation> system = new ArrayList<>();
-            for (Equation e:systems.get(flowIndex)){
-                system.add(e.copy());
-            }
-        
-        for (Edge e:cyclicEdges){
-            Commutation tmp = new Commutation(new Variable("x",e.toString(),""+flowIndex,1));
-            tmp.addTo(new Constant(0));
-            vector.addCommutation(tmp);
-        }
-
-        for (Equation e:system)
-        {
-            for (Commutation com:vector.getContent()){
-                e.insert(com);
-            }
-        }
-
-        for (int j=0; j<t.size()-1; j++){
-            Commutation com;
-            if (d[t.get(j)]==1){
-                 com = system.get(t.get(j)).solve(new Variable("x",t.get(j)+","+p[t.get(j)],""+flowIndex,1));
-            }
-            else{
-                 com = system.get(t.get(j)).solve(new Variable("x",p[t.get(j)]+","+t.get(j),""+flowIndex,1));
-            }
-
-            vector.addCommutation(com);
-        }
-
-        System.out.println(vector.toString());
-        
-    }
     
     public void addEdge(Edge edge, int flow){
         flows.get(flow).add(edge);

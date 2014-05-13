@@ -29,9 +29,15 @@ public class Commutation {
 
     @Override
     public String toString() {
-        String result=from.toString()+"->";
-        for (EquationPart p:to)
-            result+=p.toString();
+        String result = from.toString(false)+"->";
+        if (to.isEmpty())
+            result+= "0";
+        else{
+            result+=to.get(0).toString(false);
+            for(int i=1; i<to.size(); i++)
+                result+=to.get(i).toString();
+        }
+        
         return result;
     }
 

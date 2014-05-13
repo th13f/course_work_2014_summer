@@ -31,6 +31,7 @@ public class Structure {
     
     private int types;
     private int vertices;
+    public String result = "";
     
     public Structure(int types, int vertices) {
         //initializing
@@ -102,7 +103,7 @@ public class Structure {
         }
         
         for (CharacteristicVector vector:characteristicVectors)
-            System.out.println(vector);
+            Logger.info(vector.toString());
     }
     
     

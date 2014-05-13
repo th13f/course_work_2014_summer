@@ -17,8 +17,13 @@ import java.util.regex.Pattern;
  * @author th13f
  */
 public class Converter {
-    public static Structure convert(String file){
-        String[] content = file.split("\n");
+    public static Structure convert(String file,boolean isWeb){
+        String splitter;
+        if(isWeb)
+            splitter="\r\n";
+        else
+            splitter="\n";
+        String[] content = file.split(splitter);
         int I,U,K;
         I = Integer.parseInt(content[0].replace("/*|I|*/", ""));
         K = Integer.parseInt(content[1].replace("/*|K|*/", ""));

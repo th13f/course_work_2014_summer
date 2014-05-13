@@ -4,12 +4,15 @@
  */
 package by.bsu.coursework;
 
+import by.bsu.coursework.structures.Structure;
+
 /**
  *
  * @author th13f
  */
 public class Logger {
+    public static Structure system = null;
     public static void info(String info){
-        System.out.println(info);
+        system.result+=info+'\n';
     }
 }
